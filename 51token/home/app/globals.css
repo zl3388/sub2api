@@ -236,6 +236,18 @@ input[type='range'] { width: 100%; accent-color: var(--orange); }
 .locale-entry div { display: flex; justify-content: center; gap: 12px; }
 .locale-entry a { border: 1px solid var(--line); border-radius: 999px; padding: 12px 16px; background: var(--panel); color: var(--text); }
 
+.iframe-test-shell { min-height: 100vh; padding: 28px; color: var(--text); background: linear-gradient(135deg, #07111f, #0f172a 45%, #111827); }
+.iframe-test-panel { width: min(1180px, 100%); margin: 0 auto 18px; padding: 24px; border: 1px solid rgba(255,255,255,.1); border-radius: 24px; background: rgba(15,23,42,.82); box-shadow: var(--shadow); }
+.iframe-test-kicker { margin: 0 0 10px; color: var(--orange); font-weight: 1000; letter-spacing: .18em; font-size: .78rem; }
+.iframe-test-panel h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.05em; }
+.iframe-test-panel p { max-width: 880px; color: #cbd5e1; line-height: 1.7; }
+.iframe-test-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 18px; }
+.iframe-test-grid article { display: flex; gap: 10px; align-items: flex-start; padding: 14px; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: rgba(255,255,255,.04); color: #dbeafe; }
+.iframe-test-grid strong { flex: 0 0 auto; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 10px; color: #0f172a; background: var(--orange); }
+.iframe-stage { width: min(1180px, 100%); margin: 0 auto; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: 28px; background: #020617; box-shadow: var(--shadow); }
+.iframe-device-bar { display: flex; justify-content: space-between; gap: 14px; padding: 12px 16px; color: #94a3b8; background: rgba(255,255,255,.04); font-family: var(--font-mono); font-size: .8rem; }
+.iframe-preview { display: block; width: 100%; height: min(820px, 78vh); border: 0; background: white; }
+
 :root[data-theme='light'] .topbar,
 :root[data-theme='light'] .ide-card {
   background: rgba(255, 255, 255, .76);
@@ -357,4 +369,8 @@ input[type='range'] { width: 100%; accent-color: var(--orange); }
   .calc-controls label { flex-direction: column; }
   .calc-controls label span { text-align: left; }
   .footer { flex-direction: column; align-items: flex-start; }
+  .iframe-test-shell { padding: 12px; }
+  .iframe-test-grid { grid-template-columns: 1fr; }
+  .iframe-device-bar { flex-direction: column; }
+  .iframe-preview { height: 760px; }
 }

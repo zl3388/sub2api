@@ -4,6 +4,7 @@ export type SiteInfo = { name: string; domainSuffix: string; logoSrc: string; re
 export type HeroConfig = { eyebrow: string; title: string; highlightedTitle: string; suffixTitle: string; description: string; originProof: string; actions: ActionLink[]; proofs: string[] }
 export type CodeSample = { id: string; label: string; language: string; code: string; response: string; latency: string; cost: string }
 export type CodeDemoLabels = { demo: string; tabs: string; latency: string; billing: string }
+export type ControlLabels = { theme: string; light: string; dark: string; language: string; localeName: string; login: string; cta: string; menu: string; primaryNav: string; preferences: string; modalClose: string }
 export type HighlightSegment = { text: string; accent?: boolean }
 export type SectionHeading = { kicker: string; title: string; segments?: HighlightSegment[]; description?: string }
 export type ModelCard = { icon: string; name: string; price: string; latency: string }

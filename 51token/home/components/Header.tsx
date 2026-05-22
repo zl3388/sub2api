@@ -1,40 +1,43 @@
-'use client'
-
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
 import { Brand } from '@/components/Brand'
 import type { Locale } from '@/i18n/locales'
-import type { NavItem, SiteInfo } from '@/types/site'
+import type { ControlLabels, NavItem, SiteInfo } from '@/types/site'
 
-export function Header({ site, nav, locale }: { site: SiteInfo; nav: NavItem[]; locale: Locale }) {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const t = useTranslations('controls')
-
+export function Header({
+  site,
+  nav,
+  locale,
+  labels,
+}: {
+  site: SiteInfo
+  nav: NavItem[]
+  locale: Locale
+  labels: ControlLabels
+}) {
   return (
     <header className="topbar">
       <Brand site={site} />
-      <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label={t('primaryNav')}>
+      <nav className="nav-links" data-nav-links aria-label={labels.primaryNav}>
         {nav.map((item) => (
-          <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+          <a key={item.href} href={item.href}>
             {item.label}
           </a>
         ))}
       </nav>
-      <div className="toolbar" aria-label={t('preferences')}>
+      <div className="toolbar" aria-label={labels.preferences}>
         <button
           className="theme-switch"
-          data-theme-dark={t('dark')}
-          data-theme-light={t('light')}
+          data-theme-dark={labels.dark}
+          data-theme-light={labels.light}
           data-theme-toggle
           type="button"
-          aria-label={t('theme')}
+          aria-label={labels.theme}
         >
           <svg viewBox="0 0 48 24" aria-hidden="true" focusable="false">
             <rect width="48" height="24" rx="12" />
             <circle cx="12" cy="12" r="7" />
             <path d="M35 6.5a5.5 5.5 0 1 0 5.5 5.5 7 7 0 0 1-5.5-5.5z" />
           </svg>
-          <span data-theme-label>{t('dark')}</span>
+          <span data-theme-label>{labels.dark}</span>
         </button>
         <div className="locale-menu" data-locale-menu>
           <button
@@ -63,15 +66,15 @@ export function Header({ site, nav, locale }: { site: SiteInfo; nav: NavItem[]; 
         </div>
       </div>
       <div className="nav-actions">
-        <a href={site.loginPath} target="_top">{t('login')}</a>
-        <a className="nav-cta" href={site.loginPath} target="_top">{t('cta')}</a>
+        <a href={site.loginPath} target="_top">{labels.login}</a>
+        <a className="nav-cta" href={site.loginPath} target="_top">{labels.cta}</a>
       </div>
       <button
         className="menu-button"
+        data-menu-toggle
         type="button"
-        aria-expanded={menuOpen}
-        aria-label={t('menu')}
-        onClick={() => setMenuOpen((value) => !value)}
+        aria-expanded="false"
+        aria-label={labels.menu}
       >
         <span />
         <span />

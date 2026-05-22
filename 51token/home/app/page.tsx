@@ -1,12 +1,14 @@
-import Link from 'next/link'
 import { messages } from '@/i18n/messages'
 
 const localeRedirectScript = `
 (() => {
-  const stored = localStorage.getItem('locale')
+  let stored = null
+  try {
+    stored = window.localStorage?.getItem('locale')
+  } catch {}
   const browser = navigator.language || ''
   const locale = stored || (browser.toLowerCase().startsWith('zh') ? 'zh' : 'en')
-  location.replace('/' + locale + '/' + location.hash)
+  location.replace(locale + '/' + location.hash)
 })()
 `
 
@@ -17,8 +19,8 @@ export default function LocaleEntryPage() {
       <p>{messages.zh.intro.choosing}</p>
       <p>{messages.zh.intro.fallback}</p>
       <div>
-        <Link href="/zh/">简体中文</Link>
-        <Link href="/en/">English</Link>
+        <a href="zh/">简体中文</a>
+        <a href="en/">English</a>
       </div>
     </main>
   )

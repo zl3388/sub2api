@@ -1,7 +1,26 @@
 (() => {
   const money = (value) => '$' + value.toFixed(2)
+  const storage = {
+    get(key) {
+      try {
+        return window.localStorage?.getItem(key)
+      } catch {
+        return null
+      }
+    },
+    set(key, value) {
+      try {
+        window.localStorage?.setItem(key, value)
+      } catch {
+        // Third-party iframe storage can be blocked by browser tracking prevention.
+      }
+    },
+  }
 
   function init() {
+    if (window.__51tokenInteractionsReady) return
+    window.__51tokenInteractionsReady = true
+
     function updateThemeButton() {
       const button = document.querySelector('[data-theme-toggle]')
       const label = document.querySelector('[data-theme-label]')
@@ -12,14 +31,14 @@
 
     function applyTheme(theme) {
       document.documentElement.dataset.theme = theme
-      localStorage.setItem('theme', theme)
+      storage.set('theme', theme)
       updateThemeButton()
     }
 
     function rememberLocaleFromPath() {
       const locale = location.pathname.split('/').filter(Boolean).find((part) => part === 'zh' || part === 'en')
       if (locale) {
-        localStorage.setItem('locale', locale)
+        storage.set('locale', locale)
         document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en'
         document.documentElement.dataset.locale = locale
       }
@@ -38,18 +57,44 @@
 
     function parentRelativeUrl(href) {
       if (!href || href.startsWith('#') || /^[a-z][a-z0-9+.-]*:/i.test(href)) return href
-      const parentHref = document.referrer || location.href
+      let parentOrigin = window.location.origin
+      if (window.self !== window.top && document.referrer) {
+        try {
+          const referrerUrl = new URL(document.referrer)
+          if (referrerUrl.protocol.startsWith('http')) parentOrigin = referrerUrl.origin
+        } catch {
+          parentOrigin = window.location.origin
+        }
+      }
       try {
-        return new URL(href.replace(/^\//, ''), parentHref).toString()
+        return parentOrigin + (href.startsWith('/') ? href : '/' + href)
       } catch {
         return href
       }
     }
 
     document.querySelectorAll('a[target="_top"][href^="/"]').forEach((anchor) => {
+      const rewrittenHref = parentRelativeUrl(anchor.getAttribute('href'))
+      anchor.setAttribute('href', rewrittenHref)
       anchor.addEventListener('click', (event) => {
         event.preventDefault()
-        window.top.location.href = parentRelativeUrl(anchor.getAttribute('href'))
+        window.top.location.href = rewrittenHref
+      })
+    })
+
+    document.querySelectorAll('[data-menu-toggle]').forEach((button) => {
+      const nav = document.querySelector('[data-nav-links]')
+      if (!nav) return
+      button.addEventListener('click', () => {
+        const open = !nav.classList.contains('open')
+        nav.classList.toggle('open', open)
+        button.setAttribute('aria-expanded', String(open))
+      })
+      nav.querySelectorAll('a').forEach((anchor) => {
+        anchor.addEventListener('click', () => {
+          nav.classList.remove('open')
+          button.setAttribute('aria-expanded', 'false')
+        })
       })
     })
 
@@ -73,7 +118,7 @@
         option.addEventListener('click', () => {
           const nextLocale = option.dataset.localeOption
           if (!nextLocale) return
-          localStorage.setItem('locale', nextLocale)
+          storage.set('locale', nextLocale)
           close()
           location.assign(buildLocalePath(nextLocale))
         })
@@ -183,12 +228,12 @@
     })
 
     rememberLocaleFromPath()
-    applyTheme(localStorage.getItem('theme') || 'dark')
+    applyTheme(storage.get('theme') || 'dark')
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init, { once: true })
+  if (document.readyState === 'complete') {
+    window.setTimeout(init, 150)
   } else {
-    init()
+    window.addEventListener('load', () => window.setTimeout(init, 150), { once: true })
   }
 })()

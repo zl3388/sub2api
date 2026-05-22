@@ -4,7 +4,7 @@ import type { SiteContent } from '@/types/site'
 const sharedSite = {
   name: '51Token',
   domainSuffix: '.online',
-  logoSrc: '/51token-logo-svg.svg',
+  logoSrc: '../51token-logo-svg.svg',
   repositoryUrl: 'https://github.com/Wei-Shaw/sub2api',
   loginPath: '/login',
 }
